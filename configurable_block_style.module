@@ -1,0 +1,19 @@
+<?php
+
+function configurable_block_style_autoload_info() {
+  return array(
+    'ConfigurableBlockStyle' => 'includes/styles/configurable_block_style.configurable.inc',
+  );
+}
+
+function configurable_block_style_layout_style_info() {
+  $info['configurable'] = array(
+    'title' => t('Configurable'),
+    'description' => t('A style with lots of settings to make a block unique.'),
+    'block theme' => 'block_configurable',
+    'class' => 'ConfigurableBlockStyle',
+    'template' => 'templates/block-configurable',
+    'file' => 'configurable_block_style.theme.inc',
+  );
+  return $info;
+}
