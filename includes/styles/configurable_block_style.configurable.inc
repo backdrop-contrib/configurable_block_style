@@ -24,6 +24,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
     parent::__construct($plugin_name, $data);
     $this->settings += array(
       'classes' => '',
+      'content_container' => FALSE,
       'color_type' => 'default',
       'background_color' => '#ffffff',
       'text_color' => '#000000',
@@ -39,6 +40,15 @@ class ConfigurableBlockStyle extends LayoutHandler {
    */
   public function form(&$form, &$form_state) {
     if (!$this->is_region) {
+
+      // Content Container settings.
+      $form['content_container'] = array(
+        '#title' => t('Content container'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['content_container'],
+        '#description' => t('Add div with container class to align text with other regions.'),
+      );
+
       $form['classes'] = array(
         '#title' => t('Block classes'),
         '#type' => 'textfield',
@@ -79,6 +89,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+  
 
       // Height settings.
       $form['height'] = array(
@@ -137,6 +148,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
    */
   public function formSubmit($form, $form_state) {
     $this->settings['classes'] = $form_state['values']['style_settings']['classes'];
+
+    $this->settings['content_container'] = $form_state['values']['style_settings']['content_container'];
 
     $this->settings['color_type'] = $form_state['values']['style_settings']['colors']['color_type'];
     $this->settings['text_color'] = $form_state['values']['style_settings']['colors']['text_color'];

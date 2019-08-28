@@ -22,4 +22,7 @@ function template_preprocess_block_configurable(&$variables) {
       $variables['attributes']['style'] .= 'height:calc(100vw * ' . $height . ' / ' . $width . ');';
     }
   }
+  if ($style->settings['content_container']) {
+    $variables['content_container'] = TRUE;
+  }
 }
