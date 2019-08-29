@@ -18,3 +18,4 @@ customization of the look of your blocks.
 ## Maintainers for Backdrop
 
 - Joseph Flatt (hosef)
+- Tim Erickson (stpaultim)
