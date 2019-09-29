@@ -25,9 +25,14 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings += array(
       'classes' => '',
       'content_container' => FALSE,
+      'content_padding' => FALSE,
       'color_type' => 'default',
       'background_color' => '#ffffff',
       'text_color' => '#000000',
+      'padding_top' => '40',
+      'padding_right' => '30',
+      'padding_bottom' => '30',
+      'padding_left' => '30',
       'height_type' => 'default',
       'height_amount' => '500',
       'height_unit' => 'px',
@@ -41,19 +46,19 @@ class ConfigurableBlockStyle extends LayoutHandler {
   public function form(&$form, &$form_state) {
     if (!$this->is_region) {
 
+      $form['classes'] = array(
+        '#title' => t('Block classes'),
+        '#type' => 'textfield',
+        '#default_value' => $this->settings['classes'],
+        '#description' => t('Additional classes to be added to this block.'),
+      );
+
       // Content Container settings.
       $form['content_container'] = array(
         '#title' => t('Content container'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_container'],
         '#description' => t('Add div with container class to align text with other regions.'),
-      );
-
-      $form['classes'] = array(
-        '#title' => t('Block classes'),
-        '#type' => 'textfield',
-        '#default_value' => $this->settings['classes'],
-        '#description' => t('Additional classes to be added to this block.'),
       );
 
       // Color settings.
@@ -132,6 +137,79 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
 
+      // Content padding settings.
+      $form['padding'] = array(
+        '#title' => t('Padding'),
+        '#type' => 'fieldset',
+      );
+
+      $form['padding']['content_padding'] = array(
+        '#title' => t('Custom Padding'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['content_padding'],
+        '#description' => t('Extra padding for this block.'),
+      );
+
+      $form['padding']['padding_top'] = array(
+        '#title' => t('Padding top (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['padding_top'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[padding][content_padding]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
+      $form['padding']['padding_right'] = array(
+        '#title' => t('Padding right (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['padding_right'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[padding][content_padding]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
+      $form['padding']['padding_bottom'] = array(
+        '#title' => t('Padding bottom (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['padding_bottom'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[padding][content_padding]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
+      $form['padding']['padding_left'] = array(
+        '#title' => t('Padding left (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['padding_left'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[padding][content_padding]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
       // Attach form css to fix color inputs.
       $form['#attached']['css'][] = backdrop_get_path('module', 'configurable_block_style') . '/css/configurable_block_style.form.css';
     }
@@ -150,6 +228,11 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['classes'] = $form_state['values']['style_settings']['classes'];
 
     $this->settings['content_container'] = $form_state['values']['style_settings']['content_container'];
+    $this->settings['content_padding'] = $form_state['values']['style_settings']['padding']['content_padding'];
+    $this->settings['padding_top'] = $form_state['values']['style_settings']['padding']['padding_top'];
+    $this->settings['padding_right'] = $form_state['values']['style_settings']['padding']['padding_right'];
+    $this->settings['padding_bottom'] = $form_state['values']['style_settings']['padding']['padding_bottom'];
+    $this->settings['padding_left'] = $form_state['values']['style_settings']['padding']['padding_left'];
 
     $this->settings['color_type'] = $form_state['values']['style_settings']['colors']['color_type'];
     $this->settings['text_color'] = $form_state['values']['style_settings']['colors']['text_color'];
