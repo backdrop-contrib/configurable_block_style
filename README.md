@@ -19,3 +19,8 @@ customization of the look of your blocks.
 
 - Joseph Flatt (hosef)
 - Tim Erickson (stpaultim)
+
+## LICENSE
+
+This project is GPL v2 software. See the LICENSE.txt file in this directory for
+complete text.
