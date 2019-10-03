@@ -25,4 +25,7 @@ function template_preprocess_block_configurable(&$variables) {
   if ($style->settings['content_container']) {
     $variables['content_container'] = TRUE;
   }
+  if ($style->settings['content_padding'] == TRUE) {
+    $variables['attributes']['style'] .= 'padding:' . $style->settings['padding_top'] . 'px ' . $style->settings['padding_right'] . 'px ' . $style->settings['padding_bottom'] . 'px ' .$style->settings['padding_left'] . 'px;';
+  }
 }
