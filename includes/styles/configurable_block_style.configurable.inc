@@ -47,7 +47,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
     if (!$this->is_region) {
 
       $form['classes'] = array(
-        '#title' => t('Additional Block classes'),
+        '#title' => t('Additional CSS classes'),
         '#type' => 'textfield',
         '#default_value' => $this->settings['classes'],
         '#description' => t('Separate multiple classes with spaces.'),
