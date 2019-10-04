@@ -68,6 +68,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       );
       $form['colors']['color_type'] = array(
         '#type' => 'select',
+        '#default_value' => $this->settings['color_type'],
         '#options' => array(
           'default' => 'Use theme colors',
           'custom' => 'Custom colors',
