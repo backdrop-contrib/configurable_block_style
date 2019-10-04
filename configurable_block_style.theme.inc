@@ -9,7 +9,7 @@ function template_preprocess_block_configurable(&$variables) {
   $variables['attributes']['style'] = '';
 
   if ($style->settings['color_type'] === 'custom') {
-    $variables['attributes']['style'] .= 'background-color:' . ($style->settings['background_color'])  . ';';
+    $variables['attributes']['style'] .= 'background-color:' . $style->settings['background_color']  . ';';
     $variables['attributes']['style'] .= 'color:' . $style->settings['text_color'] . ';';
   }
 
