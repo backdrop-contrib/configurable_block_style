@@ -35,7 +35,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'padding_left' => '30',
       'height_type' => 'default',
       'height_amount' => '500',
-      'mn_height_amount' => '300',
+      'mn_height_amount' => '250',
       'rel_height_amount' => '40',
       'mx_height_amount' => '500',
       'height_unit' => 'px',
