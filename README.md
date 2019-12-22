@@ -5,7 +5,9 @@ customization of the look of your blocks.
 
 ## Features
 
-  - Options to change the text and background colors of your blocks
+  - Options to change the text, padding, and background colors of your blocks
+  - Option to set a custom fixed or responsive height on your blocks 
+      through the user interface
   - Custom block sizes including the option to fit the size of your background
       image on hero blocks
   - The ability to add a wrapper with the .container classes on the block content

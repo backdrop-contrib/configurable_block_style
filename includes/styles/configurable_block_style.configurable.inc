@@ -35,6 +35,9 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'padding_left' => '30',
       'height_type' => 'default',
       'height_amount' => '500',
+      'mn_height_amount' => '250',
+      'rel_height_amount' => '40',
+      'mx_height_amount' => '500',
       'height_unit' => 'px',
     );
     $this->is_region = $is_region;
@@ -107,6 +110,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#options' => array(
           'default' => 'Default',
           'fixed' => 'Fixed height',
+          'responsive' => 'Responsive height',
           'background' => 'Fit background image (Hero Blocks)',
         ),
         '#default_value' => $this->settings['height_type'],
@@ -123,6 +127,51 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#states' => array(
           'visible' => array(
             ':input[name="style_settings[height][height_type]"]' => array('value' => 'fixed'),
+          ),
+        ),
+      );
+      $form['height']['mn_height_amount'] = array(
+        '#title' => t('Minimum height (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['mn_height_amount'],
+        '#description' => t('Minimum height in px.'),
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[height][height_type]"]' => array('value' => 'responsive'),
+          ),
+        ),
+      );
+      $form['height']['rel_height_amount'] = array(
+        '#title' => t('Relative height (vw)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['rel_height_amount'],
+        '#description' => t('Relative height in vw (between max and min)'),
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[height][height_type]"]' => array('value' => 'responsive'),
+          ),
+        ),
+      );
+      $form['height']['mx_height_amount'] = array(
+        '#title' => t('Maximum height (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['mx_height_amount'],
+        '#description' => t('Maximum height in px.'),
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[height][height_type]"]' => array('value' => 'responsive'),
           ),
         ),
       );
@@ -241,6 +290,9 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
     $this->settings['height_type'] = $form_state['values']['style_settings']['height']['height_type'];
     $this->settings['height_amount'] = $form_state['values']['style_settings']['height']['height_amount'];
+    $this->settings['mn_height_amount'] = $form_state['values']['style_settings']['height']['mn_height_amount'];
+    $this->settings['rel_height_amount'] = $form_state['values']['style_settings']['height']['rel_height_amount'];
+    $this->settings['mx_height_amount'] = $form_state['values']['style_settings']['height']['mx_height_amount'];
     $this->settings['height_unit'] = $form_state['values']['style_settings']['height']['height_unit'];
   }
 

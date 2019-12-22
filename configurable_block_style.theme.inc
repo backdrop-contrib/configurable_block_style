@@ -18,6 +18,11 @@ function template_preprocess_block_configurable(&$variables) {
   if ($style->settings['height_type'] === 'fixed') {
     $variables['attributes']['style'] .= 'height:' . $style->settings['height_amount'] . $style->settings['height_unit'] . ';';
   }
+  if ($style->settings['height_type'] === 'responsive') {
+    $variables['attributes']['style'] .= 'min-height:' . $style->settings['mn_height_amount'] . 'px;' .
+      ' height:' . $style->settings['rel_height_amount'] . 'vw;' .
+      ' max-height:' . $style->settings['mx_height_amount'] . 'px;';
+  }
   if ($style->settings['height_type'] === 'background' && $block->plugin === 'layout:hero') {
     if (!empty($block->settings['image_path'])) {
       $variables['attributes']['style'] .= 'background-size:contain;background-repeat:no-repeat;width:100%;min-height:initial;';
