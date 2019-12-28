@@ -40,4 +40,10 @@ function template_preprocess_block_configurable(&$variables) {
       $style->settings['padding_bottom'] . 'px ' .
       $style->settings['padding_left'] . 'px;';
   }
+
+  if ($style->settings['tint'] == TRUE) {
+    $variables['attributes']['style'] .= 'background-color: rgba(100,100,100,.' .
+      $style->settings['tint_value'] . ');' . 'background-blend-mode: multiply;';
+
+  }
 }

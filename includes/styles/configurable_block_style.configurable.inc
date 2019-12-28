@@ -35,9 +35,11 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'padding_left' => '30',
       'height_type' => 'default',
       'height_amount' => '500',
-      'mn_height_amount' => '300',
+      'mn_height_amount' => '250',
       'rel_height_amount' => '40',
       'mx_height_amount' => '500',
+      'image_tint' => FALSE,
+      'tint_value' => '5',
       'height_unit' => 'px',
     );
     $this->is_region = $is_region;
@@ -260,6 +262,34 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
 
+      $form['tint'] = array(
+        '#title' => t('Background tint'),
+        '#type' => 'fieldset',
+      );
+
+      $form['tint']['tint'] = array(
+        '#title' => t('Tint on Background image'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['tint'],
+        '#description' => t('Tint over background image.'),
+      );
+
+      $form['tint']['tint_value'] = array(
+        '#title' => t('Tint value (1-10)'),
+        '#description' => t('1=.1 and 9=.9'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['tint_value'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[tint][tint]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
       // Attach form css to fix color inputs.
       $form['#attached']['css'][] = backdrop_get_path('module', 'configurable_block_style') . '/css/configurable_block_style.form.css';
     }
@@ -294,6 +324,9 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['rel_height_amount'] = $form_state['values']['style_settings']['height']['rel_height_amount'];
     $this->settings['mx_height_amount'] = $form_state['values']['style_settings']['height']['mx_height_amount'];
     $this->settings['height_unit'] = $form_state['values']['style_settings']['height']['height_unit'];
+
+    $this->settings['tint'] = $form_state['values']['style_settings']['tint']['tint'];
+    $this->settings['tint_value'] = $form_state['values']['style_settings']['tint']['tint_value'];
   }
 
   protected function getUnitOptions() {
