@@ -281,6 +281,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#attributes' => array(
           'type' => 'number',
           'step' => '1',
+          'min' => '1',
+          'max' => '9',
         ),
         '#states' => array(
           'visible' => array(
