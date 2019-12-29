@@ -196,7 +196,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       );
 
       $form['padding']['content_padding'] = array(
-        '#title' => t('Custom Padding'),
+        '#title' => t('Custom padding'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_padding'],
         '#description' => t('Extra padding for this block.'),
@@ -268,7 +268,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       );
 
       $form['tint']['tint'] = array(
-        '#title' => t('Tint on Background image'),
+        '#title' => t('Tint on background image'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['tint'],
       );
