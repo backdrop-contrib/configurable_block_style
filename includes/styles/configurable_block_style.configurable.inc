@@ -271,12 +271,11 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#title' => t('Tint on Background image'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['tint'],
-        '#description' => t('Tint over background image.'),
       );
 
       $form['tint']['tint_value'] = array(
-        '#title' => t('Tint value (1-10)'),
-        '#description' => t('1=.1 and 9=.9'),
+        '#title' => t('Tint value'),
+        '#description' => t('Enter value 1-9 to correspond to css value of .1-.9'),
         '#type' => 'number',
         '#default_value' => $this->settings['tint_value'],
         '#attributes' => array(
