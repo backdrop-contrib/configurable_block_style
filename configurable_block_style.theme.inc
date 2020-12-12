@@ -2,6 +2,7 @@
 
 function template_preprocess_block_configurable(&$variables) {
   // Re-use all the preprocessing provided by the default block template.
+  include_once BACKDROP_ROOT . '/core/modules/layout/layout.theme.inc';
   template_preprocess_block($variables);
 
   $block = $variables['block'];
