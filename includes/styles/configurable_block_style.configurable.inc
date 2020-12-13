@@ -39,7 +39,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'rel_height_amount' => '40',
       'mx_height_amount' => '500',
       'tint' => FALSE,
-      'tint_value' => '0.5',
+      'tint_value' => '0',
       'height_unit' => 'px',
     );
     $this->is_region = $is_region;
