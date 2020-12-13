@@ -11,9 +11,19 @@ function template_preprocess_block_configurable(&$variables) {
   }
 
   if ($style->settings['color_type'] === 'custom') {
-    $variables['attributes']['style'] .= 'background-color:' . $style->settings['background_color'] . ';';
-    $variables['attributes']['style'] .= 'color:' . $style->settings['text_color'] . ';';
+    $rgba = image_hex2rgba($style->settings['background_color']);
+    $variables['attributes']['style'] .= 'background-color: rgb(' . $rgba['red'] . ',' . $rgba['green'] . ',' . $rgba['blue']; 
+    // if ($style->settings['tint'] == TRUE) {
+    $variables['attributes']['style'] .= ', .' . $style->settings['tint_value'];
+    // } 
+    $variables['attributes']['style'] .= ');';
+    $variables['attributes']['style'] .= 'color:' . $style->settings['text_color'] . ";" . 'background-blend-mode: multiply;';
   }
+
+  // if ($style->settings['tint'] == TRUE) {
+  //   $variables['attributes']['style'] .= 'background-color: ' . $rgba .
+  //     $style->settings['tint_value'] . ');' . 'background-blend-mode: multiply;';
+  // }
 
   if ($style->settings['height_type'] === 'fixed') {
     $variables['attributes']['style'] .= 'height:' . $style->settings['height_amount'] . $style->settings['height_unit'] . ';';
@@ -41,9 +51,5 @@ function template_preprocess_block_configurable(&$variables) {
       $style->settings['padding_left'] . 'px;';
   }
 
-  if ($style->settings['tint'] == TRUE) {
-    $variables['attributes']['style'] .= 'background-color: rgba(100,100,100,.' .
-      $style->settings['tint_value'] . ');' . 'background-blend-mode: multiply;';
 
-  }
 }

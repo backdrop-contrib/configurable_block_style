@@ -38,8 +38,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'mn_height_amount' => '250',
       'rel_height_amount' => '40',
       'mx_height_amount' => '500',
-      'image_tint' => FALSE,
-      'tint_value' => '5',
+      'tint' => FALSE,
+      'tint_value' => '0.5',
       'height_unit' => 'px',
     );
     $this->is_region = $is_region;
@@ -90,6 +90,37 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+
+
+      $form['colors']['tint'] = array(
+        '#title' => t('Tint on background color (or tint over background image).'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['tint'],
+        '#states' => array(
+          'invisible' => array(
+            ':input[name="style_settings[colors][color_type]"]' => array('value' => 'default'),
+          ),
+        ),
+      );
+
+      $form['colors']['tint_value'] = array(
+        '#title' => t('Tint value'),
+        '#description' => t('Enter value 0-9 to correspond to css value of 0-.9'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['tint_value'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+          'min' => '0',
+          'max' => '9',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[colors][tint]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
       $form['colors']['text_color'] = array(
         '#title' => t('Text Color'),
         '#type' => 'color',
@@ -101,7 +132,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
   
-
       // Height settings.
       $form['height'] = array(
         '#title' => t('Height'),
@@ -262,35 +292,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
 
-      $form['tint'] = array(
-        '#title' => t('Background tint'),
-        '#type' => 'fieldset',
-      );
-
-      $form['tint']['tint'] = array(
-        '#title' => t('Tint on background image'),
-        '#type' => 'checkbox',
-        '#default_value' => $this->settings['tint'],
-      );
-
-      $form['tint']['tint_value'] = array(
-        '#title' => t('Tint value'),
-        '#description' => t('Enter value 1-9 to correspond to css value of .1-.9'),
-        '#type' => 'number',
-        '#default_value' => $this->settings['tint_value'],
-        '#attributes' => array(
-          'type' => 'number',
-          'step' => '1',
-          'min' => '1',
-          'max' => '9',
-        ),
-        '#states' => array(
-          'visible' => array(
-            ':input[name="style_settings[tint][tint]"]' => array('checked' => TRUE),
-          ),
-        ),
-      );
-
       // Attach form css to fix color inputs.
       $form['#attached']['css'][] = backdrop_get_path('module', 'configurable_block_style') . '/css/configurable_block_style.form.css';
     }
@@ -326,8 +327,11 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['mx_height_amount'] = $form_state['values']['style_settings']['height']['mx_height_amount'];
     $this->settings['height_unit'] = $form_state['values']['style_settings']['height']['height_unit'];
 
-    $this->settings['tint'] = $form_state['values']['style_settings']['tint']['tint'];
-    $this->settings['tint_value'] = $form_state['values']['style_settings']['tint']['tint_value'];
+    $this->settings['tint'] = $form_state['values']['style_settings']['colors']['tint'];
+    $this->settings['tint_value'] = $form_state['values']['style_settings']['colors']['tint_value'];
+    if ($this->settings['tint'] == FALSE) {
+      $this->settings['tint_value'] = '0';
+    }
   }
 
   protected function getUnitOptions() {
