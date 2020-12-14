@@ -11,19 +11,19 @@ function template_preprocess_block_configurable(&$variables) {
   }
 
   if ($style->settings['color_type'] === 'custom') {
-    $rgba = image_hex2rgba($style->settings['background_color']);
-    $variables['attributes']['style'] .= 'background-color: rgb(' . $rgba['red'] . ',' . $rgba['green'] . ',' . $rgba['blue']; 
-    // if ($style->settings['tint'] == TRUE) {
-    $variables['attributes']['style'] .= ', .' . $style->settings['tint_value'];
-    // } 
-    $variables['attributes']['style'] .= ');';
-    $variables['attributes']['style'] .= 'color:' . $style->settings['text_color'] . ";" . 'background-blend-mode: multiply;';
-  }
+    // converting to rgba value for purpose of potentially displaying tint
+    $rgbabackground = image_hex2rgba($style->settings['background_color']);
+    $rgbatext = image_hex2rgba($style->settings['text_color']);
 
-  // if ($style->settings['tint'] == TRUE) {
-  //   $variables['attributes']['style'] .= 'background-color: ' . $rgba .
-  //     $style->settings['tint_value'] . ');' . 'background-blend-mode: multiply;';
-  // }
+    $variables['attributes']['style'] .= 'background-color: rgb(' . $rgbabackground['red'] . ',' . $rgbabackground['green'] . ',' . $rgbabackground['blue']; 
+    if ($style->settings['tint'] == TRUE) {
+      $variables['attributes']['style'] .= ',' . $style->settings['tint_value'];
+    } 
+    $variables['attributes']['style'] .= '); color: rgb(' . $rgbatext['red'] . ',' . $rgbatext['green'] . ',' . $rgbatext['blue'] . ');';
+    if ($style->settings['tint'] == TRUE) {
+      $variables['attributes']['style'] .= ";" . 'background-blend-mode: multiply;';
+    } 
+  }
 
   if ($style->settings['height_type'] === 'fixed') {
     $variables['attributes']['style'] .= 'height:' . $style->settings['height_amount'] . $style->settings['height_unit'] . ';';
@@ -50,6 +50,4 @@ function template_preprocess_block_configurable(&$variables) {
       $style->settings['padding_bottom'] . 'px ' .
       $style->settings['padding_left'] . 'px;';
   }
-
-
 }

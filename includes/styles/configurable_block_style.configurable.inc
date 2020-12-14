@@ -91,7 +91,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
 
-
       $form['colors']['tint'] = array(
         '#title' => t('Tint on background color (or tint over background image).'),
         '#type' => 'checkbox',
@@ -105,14 +104,14 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
       $form['colors']['tint_value'] = array(
         '#title' => t('Tint value'),
-        '#description' => t('Enter value 0-9 to correspond to css value of 0-.9'),
+        '#description' => t('Enter value 0-1 (to represent tint percentage - Example: .45).'),
         '#type' => 'number',
         '#default_value' => $this->settings['tint_value'],
+        '#step' => '.01',
         '#attributes' => array(
           'type' => 'number',
-          'step' => '1',
           'min' => '0',
-          'max' => '9',
+          'max' => '1',
         ),
         '#states' => array(
           'visible' => array(
@@ -329,9 +328,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
     $this->settings['tint'] = $form_state['values']['style_settings']['colors']['tint'];
     $this->settings['tint_value'] = $form_state['values']['style_settings']['colors']['tint_value'];
-    if ($this->settings['tint'] == FALSE) {
-      $this->settings['tint_value'] = '0';
-    }
   }
 
   protected function getUnitOptions() {
