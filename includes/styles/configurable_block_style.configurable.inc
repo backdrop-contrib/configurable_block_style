@@ -38,6 +38,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'mn_height_amount' => '250',
       'rel_height_amount' => '40',
       'mx_height_amount' => '500',
+      'tint' => FALSE,
+      'tint_value' => '0',
       'height_unit' => 'px',
     );
     $this->is_region = $is_region;
@@ -88,6 +90,36 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+
+      $form['colors']['tint'] = array(
+        '#title' => t('Tint on background color (or tint over background image).'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['tint'],
+        '#states' => array(
+          'invisible' => array(
+            ':input[name="style_settings[colors][color_type]"]' => array('value' => 'default'),
+          ),
+        ),
+      );
+
+      $form['colors']['tint_value'] = array(
+        '#title' => t('Tint value'),
+        '#description' => t('Enter value 0-1 (to represent tint percentage - Example: .45).'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['tint_value'],
+        '#step' => '.01',
+        '#attributes' => array(
+          'type' => 'number',
+          'min' => '0',
+          'max' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[colors][tint]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
       $form['colors']['text_color'] = array(
         '#title' => t('Text Color'),
         '#type' => 'color',
@@ -99,7 +131,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
   
-
       // Height settings.
       $form['height'] = array(
         '#title' => t('Height'),
@@ -194,7 +225,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       );
 
       $form['padding']['content_padding'] = array(
-        '#title' => t('Custom Padding'),
+        '#title' => t('Custom padding'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_padding'],
         '#description' => t('Extra padding for this block.'),
@@ -294,6 +325,9 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['rel_height_amount'] = $form_state['values']['style_settings']['height']['rel_height_amount'];
     $this->settings['mx_height_amount'] = $form_state['values']['style_settings']['height']['mx_height_amount'];
     $this->settings['height_unit'] = $form_state['values']['style_settings']['height']['height_unit'];
+
+    $this->settings['tint'] = $form_state['values']['style_settings']['colors']['tint'];
+    $this->settings['tint_value'] = $form_state['values']['style_settings']['colors']['tint_value'];
   }
 
   protected function getUnitOptions() {

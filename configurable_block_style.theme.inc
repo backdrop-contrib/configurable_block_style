@@ -12,8 +12,18 @@ function template_preprocess_block_configurable(&$variables) {
   }
 
   if ($style->settings['color_type'] === 'custom') {
-    $variables['attributes']['style'] .= 'background-color:' . $style->settings['background_color'] . ';';
-    $variables['attributes']['style'] .= 'color:' . $style->settings['text_color'] . ';';
+    // converting to rgba value for purpose of potentially displaying tint
+    $rgbabackground = image_hex2rgba($style->settings['background_color']);
+    $rgbatext = image_hex2rgba($style->settings['text_color']);
+
+    $variables['attributes']['style'] .= 'background-color: rgb(' . $rgbabackground['red'] . ',' . $rgbabackground['green'] . ',' . $rgbabackground['blue']; 
+    if ($style->settings['tint'] == TRUE) {
+      $variables['attributes']['style'] .= ',' . $style->settings['tint_value'];
+    } 
+    $variables['attributes']['style'] .= '); color: rgb(' . $rgbatext['red'] . ',' . $rgbatext['green'] . ',' . $rgbatext['blue'] . ');';
+    if ($style->settings['tint'] == TRUE) {
+      $variables['attributes']['style'] .= ";" . 'background-blend-mode: multiply;';
+    } 
   }
 
   if ($style->settings['height_type'] === 'fixed') {
