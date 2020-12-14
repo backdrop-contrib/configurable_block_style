@@ -10,12 +10,28 @@ customization of the look of your blocks.
       through the user interface
   - Custom block sizes including the option to fit the size of your background
       image on hero blocks
+  - Option to add a custom tint over background image in hero blocks
   - The ability to add a wrapper with the .container classes on the block content
 
 ## Installation
 
 - Install this module using the official Backdrop CMS instructions at
   https://backdropcms.org/guide/modules.
+  
+## Instructions
+
+1. Go to admin/structure/layouts and select "Manage Blocks" for the the layout
+you wish to edit.
+
+2. Choose the block you wish to style and select "Configure"
+
+3. Open "Styles" section and choose "Configurable" style
+
+4. Make style choices and then "Update Block"
+
+5. You will need to save changes to your layout before they will take effect
+
+See screenshots: https://github.com/backdrop-contrib/configurable_block_style/wiki
 
 ## Maintainers for Backdrop
 
