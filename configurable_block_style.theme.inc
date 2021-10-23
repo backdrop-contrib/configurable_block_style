@@ -11,21 +11,23 @@ function template_preprocess_block_configurable(&$variables) {
     $variables['attributes']['style'] = '';
   }
 
+  // Color.
   if ($style->settings['color_type'] === 'custom') {
     // converting to rgba value for purpose of potentially displaying tint
     $rgbabackground = image_hex2rgba($style->settings['background_color']);
     $rgbatext = image_hex2rgba($style->settings['text_color']);
 
-    $variables['attributes']['style'] .= 'background-color: rgb(' . $rgbabackground['red'] . ',' . $rgbabackground['green'] . ',' . $rgbabackground['blue']; 
+    $variables['attributes']['style'] .= 'background-color: rgb(' . $rgbabackground['red'] . ',' . $rgbabackground['green'] . ',' . $rgbabackground['blue'];
     if ($style->settings['tint'] == TRUE) {
       $variables['attributes']['style'] .= ',' . $style->settings['tint_value'];
-    } 
+    }
     $variables['attributes']['style'] .= '); color: rgb(' . $rgbatext['red'] . ',' . $rgbatext['green'] . ',' . $rgbatext['blue'] . ');';
     if ($style->settings['tint'] == TRUE) {
       $variables['attributes']['style'] .= ";" . 'background-blend-mode: multiply;';
-    } 
+    }
   }
 
+  // Height.
   if ($style->settings['height_type'] === 'fixed') {
     $variables['attributes']['style'] .= 'height:' . $style->settings['height_amount'] . $style->settings['height_unit'] . ';';
   }
@@ -41,9 +43,35 @@ function template_preprocess_block_configurable(&$variables) {
       $variables['attributes']['style'] .= 'height:calc(100vw * ' . $height . ' / ' . $width . ');';
     }
   }
+
+  // Border.
+  if ($style->settings['border_type'] === 'custom') {
+    $variables['attributes']['style'] .= 'border:' . $style->settings['border_size'] . 'px ' . $style->settings['border_style'] . ' ' . $style->settings['border_color'] . ';';
+  }
+
+  // Corners.
+  if ($style->settings['corner_type'] === 'round') {
+    $variables['attributes']['style'] .= 'border-radius:' . $style->settings['corner_size'] . 'px;';
+  }
+  if ($style->settings['corner_type'] === 'square') {
+    $variables['attributes']['style'] .= 'border-radius:0px;';
+  }
+
+  // Shadow.
+  if ($style->settings['shadow_type'] === 'custom') {
+    $sizes = array();
+    $sizes[] = $style->settings['shadow_size'] . 'px' ;
+    $sizes[] = $style->settings['shadow_size'] . 'px' ;
+    $sizes[] = $style->settings['shadow_size'] * 2 . 'px' ;
+    $variables['attributes']['style'] .= 'box-shadow: ' . implode(' ', $sizes) . ' ' . $style->settings['shadow_color'] . ';';
+  }
+
+  // Container wrapper.
   if ($style->settings['content_container']) {
     $variables['content_container'] = TRUE;
   }
+
+  // Padding.
   if ($style->settings['content_padding'] == TRUE) {
     $variables['attributes']['style'] .= 'padding:' .
       $style->settings['padding_top'] . 'px ' .

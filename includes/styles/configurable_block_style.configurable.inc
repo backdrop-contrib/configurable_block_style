@@ -41,6 +41,15 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'tint' => FALSE,
       'tint_value' => '0',
       'height_unit' => 'px',
+      'border_type' => 'default',
+      'border_size' => '2',
+      'border_style' => 'solid',
+      'border_color' => '#000000',
+      'corner_type' => 'default',
+      'corner_size' => '8',
+      'shadow_type' => 'default',
+      'shadow_size' => '4',
+      'shadow_color' => '#000000',
     );
     $this->is_region = $is_region;
   }
@@ -130,7 +139,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
-  
+
       // Height settings.
       $form['height'] = array(
         '#title' => t('Height'),
@@ -214,6 +223,122 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#states' => array(
           'visible' => array(
             ':input[name="style_settings[height][height_type]"]' => array('value' => 'fixed'),
+          ),
+        ),
+      );
+
+      // Border settings.
+      $form['border'] = array(
+        '#title' => t('Border'),
+        '#type' => 'fieldset',
+      );
+      $form['border']['border_type'] = array(
+        '#type' => 'select',
+        '#options' => array(
+          'default' => t('Default'),
+          'custom' => t('Custom'),
+        ),
+        '#default_value' => $this->settings['border_type'],
+      );
+      $form['border']['border_size'] = array(
+        '#title' => t('Border Size (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['border_size'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[border][border_type]"]' => array('value' => 'custom'),
+          ),
+        ),
+      );
+      $form['border']['border_style'] = array(
+        '#title' => t('Border Style'),
+        '#type' => 'select',
+        '#options' => $this->getBorderStyleOptions(),
+        '#default_value' => $this->settings['border_style'],
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[border][border_type]"]' => array('value' => 'custom'),
+          ),
+        ),
+      );
+      $form['border']['border_color'] = array(
+        '#title' => t('Border Color'),
+        '#type' => 'color',
+        '#default_value' => $this->settings['border_color'],
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[border][border_type]"]' => array('value' => 'custom'),
+          ),
+        ),
+      );
+
+      // Corner settings.
+      $form['corner'] = array(
+        '#title' => t('Corners'),
+        '#type' => 'fieldset',
+      );
+      $form['corner']['corner_type'] = array(
+        '#type' => 'select',
+        '#options' => array(
+          'default' => t('Default'),
+          'round' => t('Round'),
+          'square' => t('Square'),
+        ),
+        '#default_value' => $this->settings['corner_type'],
+      );
+      $form['corner']['corner_size'] = array(
+        '#title' => t('Corner Size (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['corner_size'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[corner][corner_type]"]' => array('value' => 'round'),
+          ),
+        ),
+      );
+
+      // Shadow settings.
+      $form['shadow'] = array(
+        '#title' => t('Shadow'),
+        '#type' => 'fieldset',
+      );
+      $form['shadow']['shadow_type'] = array(
+        '#type' => 'select',
+        '#options' => array(
+          'default' => t('Default'),
+          'custom' => t('Custom'),
+        ),
+        '#default_value' => $this->settings['shadow_type'],
+      );
+      $form['shadow']['shadow_size'] = array(
+        '#title' => t('Shadow Size (px)'),
+        '#type' => 'number',
+        '#default_value' => $this->settings['shadow_size'],
+        '#attributes' => array(
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[shadow][shadow_type]"]' => array('value' => 'custom'),
+          ),
+        ),
+      );
+      $form['shadow']['shadow_color'] = array(
+        '#title' => t('Shadow Color'),
+        '#type' => 'color',
+        '#default_value' => $this->settings['border_color'],
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[shadow][shadow_type]"]' => array('value' => 'custom'),
           ),
         ),
       );
@@ -319,6 +444,18 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['text_color'] = $form_state['values']['style_settings']['colors']['text_color'];
     $this->settings['background_color'] = $form_state['values']['style_settings']['colors']['background_color'];
 
+    $this->settings['border_type'] = $form_state['values']['style_settings']['border']['border_type'];
+    $this->settings['border_size'] = $form_state['values']['style_settings']['border']['border_size'];
+    $this->settings['border_style'] = $form_state['values']['style_settings']['border']['border_style'];
+    $this->settings['border_color'] = $form_state['values']['style_settings']['border']['border_color'];
+
+    $this->settings['corner_type'] = $form_state['values']['style_settings']['corner']['corner_type'];
+    $this->settings['corner_size'] = $form_state['values']['style_settings']['corner']['corner_size'];
+
+    $this->settings['shadow_type'] = $form_state['values']['style_settings']['shadow']['shadow_type'];
+    $this->settings['shadow_size'] = $form_state['values']['style_settings']['shadow']['shadow_size'];
+    $this->settings['shadow_color'] = $form_state['values']['style_settings']['shadow']['shadow_color'];
+
     $this->settings['height_type'] = $form_state['values']['style_settings']['height']['height_type'];
     $this->settings['height_amount'] = $form_state['values']['style_settings']['height']['height_amount'];
     $this->settings['mn_height_amount'] = $form_state['values']['style_settings']['height']['mn_height_amount'];
@@ -337,6 +474,15 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'rem' => 'rem',
       'vh' => 'vh',
       '%' => '%',
+    );
+  }
+
+  protected function getBorderStyleOptions() {
+    return array(
+      'dashed' => t('Dashed'),
+      'dotted' => t('Dotted'),
+      'double' => t('Double'),
+      'solid' => t('Solid'),
     );
   }
 }
