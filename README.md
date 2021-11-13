@@ -33,6 +33,8 @@ you wish to edit.
 
 See screenshots: https://github.com/backdrop-contrib/configurable_block_style/wiki
 
+Video: https://youtu.be/WfuUIVzjQUg (does not include recent new features)
+
 ## Maintainers for Backdrop
 
 - Joseph Flatt (hosef)
