@@ -50,6 +50,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'shadow_type' => 'default',
       'shadow_size' => '4',
       'shadow_color' => '#000000',
+      'block_title_link' => '',
     );
     $this->is_region = $is_region;
   }
@@ -73,6 +74,25 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_container'],
         '#description' => t('Add div with container class to align text with other regions.'),
+      );
+
+      // Block Title Link settings.
+      $form['make_title_link'] = array(
+        '#title' => t('Make block title into a link'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['make_title_link'],
+      );
+
+      $form['block_title_link'] = array(
+        '#title' => t('Block Title Link'),
+        '#type' => 'textfield',
+        '#default_value' => $this->settings['block_title_link'],
+        '#description' => t('Enter a URL to make the block title a link.'),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[make_title_link]"]' => array('checked' => TRUE),
+          ),
+        ),
       );
 
       // Color settings.
@@ -465,6 +485,10 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
     $this->settings['tint'] = $form_state['values']['style_settings']['colors']['tint'];
     $this->settings['tint_value'] = $form_state['values']['style_settings']['colors']['tint_value'];
+
+    $this->settings['make_title_link'] = $form_state['values']['style_settings']['make_title_link'];
+    $this->settings['block_title_link'] = $form_state['values']['style_settings']['block_title_link'];
+    
   }
 
   protected function getUnitOptions() {

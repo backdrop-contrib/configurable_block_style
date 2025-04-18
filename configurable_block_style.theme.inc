@@ -79,4 +79,7 @@ function template_preprocess_block_configurable(&$variables) {
       $style->settings['padding_bottom'] . 'px ' .
       $style->settings['padding_left'] . 'px;';
   }
+
+  $variables['block_title_link'] = !empty($style->settings['block_title_link']) ? $style->settings['block_title_link'] : '';
+  $variables['make_title_link'] = !empty($style->settings['make_title_link']);
 }

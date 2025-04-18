@@ -19,7 +19,11 @@
   <?php endif;?>
     <?php print render($title_prefix);?>
     <?php if ($title):?>
+    <?php if ($make_title_link == 1): ?>
+    <h2 class="block-title"><a href="<?php print $block_title_link; ?>"><?php print $title;?></a></h2>
+    <?php else: ?>
     <h2 class="block-title"><?php print $title;?></h2>
+    <?php endif; ?>
     <?php endif;?>
     <?php print render($title_suffix);?>
     <div class="block-content">
