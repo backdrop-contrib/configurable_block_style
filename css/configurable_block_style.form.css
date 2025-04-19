@@ -22,3 +22,7 @@ input.form-color[type=color]::-webkit-color-swatch {
 input.form-color[type=color]::-webkit-color-swatch-wrapper {
   padding: 0;
 }
+
+.indented-element {
+  margin-left: 20px; /* Adjust the value as needed */
+}

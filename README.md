@@ -1,7 +1,7 @@
 #  Configurable Block Style
 
 This module provides a block style with many configuration options to allow easy
-customization of the look of your blocks.
+customization of the look and behavior of your blocks.
 
 ## Features
 
@@ -10,6 +10,8 @@ customization of the look of your blocks.
       through the user interface
   - Custom block sizes including the option to fit the size of your background
       image on hero blocks
+  - Option to make block title into a link
+  - Option to make a block collapsible
   - Option to add a custom tint over background image in hero blocks
   - The ability to add a wrapper with the .container classes on the block content
 
@@ -32,8 +34,6 @@ you wish to edit.
 5. You will need to save changes to your layout before they will take effect
 
 See screenshots: https://github.com/backdrop-contrib/configurable_block_style/wiki
-
-Video: https://youtu.be/WfuUIVzjQUg (does not include recent new features)
 
 ## Maintainers for Backdrop
 

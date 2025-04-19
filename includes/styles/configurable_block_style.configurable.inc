@@ -51,6 +51,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'shadow_size' => '4',
       'shadow_color' => '#000000',
       'block_title_link' => '',
+      'collapsible' => FALSE,
+      'show_caret' => FALSE,
     );
     $this->is_region = $is_region;
   }
@@ -68,37 +70,77 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#description' => t('Separate multiple classes with spaces.'),
       );
 
+
+      $form['behaviors'] = array(
+        '#title' => t('Behaviors (container, collapsible, title link)'),
+        '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+
       // Content Container settings.
-      $form['content_container'] = array(
+      $form['behaviors']['content_container'] = array(
         '#title' => t('Content container'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_container'],
         '#description' => t('Add div with container class to align text with other regions.'),
       );
 
+      // Collapsible settings.
+      $form['behaviors']['collapsible'] = array(
+        '#title' => t('Make block collapsible'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['collapsible'],
+        '#description' => t('Enable this option to make the block content collapsible.'),
+      );
+
+      $form['behaviors']['show_caret'] = array(
+        '#title' => t('Show caret indicator'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['show_caret'],
+        '#description' => t('Display a caret indicator next to the title.'),
+        '#attributes' => array(
+          'class' => array('indented-element'),
+          'type' => 'number',
+          'step' => '1',
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[behaviors][collapsible]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+
       // Block Title Link settings.
-      $form['make_title_link'] = array(
+      $form['behaviors']['make_title_link'] = array(
         '#title' => t('Make block title into a link'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['make_title_link'],
       );
 
-      $form['block_title_link'] = array(
+      $form['behaviors']['block_title_link'] = array(
         '#title' => t('Block Title Link'),
         '#type' => 'textfield',
         '#default_value' => $this->settings['block_title_link'],
         '#description' => t('Enter a URL to make the block title a link.'),
+        '#attributes' => array(
+          'class' => array('indented-element'),
+          'type' => 'number',
+          'step' => '1',
+        ),
         '#states' => array(
           'visible' => array(
-            ':input[name="style_settings[make_title_link]"]' => array('checked' => TRUE),
+            ':input[name="style_settings[behaviors][make_title_link]"]' => array('checked' => TRUE),
           ),
         ),
       );
 
       // Color settings.
       $form['colors'] = array(
-        '#title' => t('Colors'),
+        '#title' => t('Colors (background, text)'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
       $form['colors']['color_type'] = array(
         '#type' => 'select',
@@ -162,8 +204,10 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
       // Height settings.
       $form['height'] = array(
-        '#title' => t('Height'),
+        '#title' => t('Height (Fixed, Responsive, Background Image)'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
       $form['height']['height_type'] = array(
         '#type' => 'select',
@@ -177,7 +221,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       );
 
       $form['height']['height_amount'] = array(
-        '#title' => t('Height'),
+        '#title' => t('Height (fixed, responsive, background)'),
         '#type' => 'number',
         '#default_value' => $this->settings['height_amount'],
         '#attributes' => array(
@@ -249,8 +293,10 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
       // Border settings.
       $form['border'] = array(
-        '#title' => t('Border'),
+        '#title' => t('Border (size, style, color)'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
       $form['border']['border_type'] = array(
         '#type' => 'select',
@@ -300,6 +346,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['corner'] = array(
         '#title' => t('Corners'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
       $form['corner']['corner_type'] = array(
         '#type' => 'select',
@@ -327,8 +375,10 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
       // Shadow settings.
       $form['shadow'] = array(
-        '#title' => t('Shadow'),
+        '#title' => t('Shadow (size, color)'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
       $form['shadow']['shadow_type'] = array(
         '#type' => 'select',
@@ -367,6 +417,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['padding'] = array(
         '#title' => t('Padding'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
 
       $form['padding']['content_padding'] = array(
@@ -453,7 +505,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
   public function formSubmit($form, $form_state) {
     $this->settings['classes'] = $form_state['values']['style_settings']['classes'];
 
-    $this->settings['content_container'] = $form_state['values']['style_settings']['content_container'];
+    $this->settings['content_container'] = $form_state['values']['style_settings']['behaviors']['content_container'];
     $this->settings['content_padding'] = $form_state['values']['style_settings']['padding']['content_padding'];
     $this->settings['padding_top'] = $form_state['values']['style_settings']['padding']['padding_top'];
     $this->settings['padding_right'] = $form_state['values']['style_settings']['padding']['padding_right'];
@@ -486,9 +538,10 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['tint'] = $form_state['values']['style_settings']['colors']['tint'];
     $this->settings['tint_value'] = $form_state['values']['style_settings']['colors']['tint_value'];
 
-    $this->settings['make_title_link'] = $form_state['values']['style_settings']['make_title_link'];
-    $this->settings['block_title_link'] = $form_state['values']['style_settings']['block_title_link'];
-    
+    $this->settings['make_title_link'] = $form_state['values']['style_settings']['behaviors']['make_title_link'];
+    $this->settings['block_title_link'] = $form_state['values']['style_settings']['behaviors']['block_title_link'];
+    $this->settings['collapsible'] = $form_state['values']['style_settings']['behaviors']['collapsible'];
+    $this->settings['show_caret'] = $form_state['values']['style_settings']['behaviors']['show_caret'];
   }
 
   protected function getUnitOptions() {

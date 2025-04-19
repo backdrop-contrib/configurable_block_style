@@ -82,4 +82,10 @@ function template_preprocess_block_configurable(&$variables) {
 
   $variables['block_title_link'] = !empty($style->settings['block_title_link']) ? $style->settings['block_title_link'] : '';
   $variables['make_title_link'] = !empty($style->settings['make_title_link']);
+
+  $variables['collapsible'] = !empty($style->settings['collapsible']);
+
+  $variables['block_id'] = $block->module . '-' . $block->delta;
+
+  $variables['show_caret'] = !empty($style->settings['show_caret']);
 }
