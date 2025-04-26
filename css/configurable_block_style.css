@@ -11,7 +11,7 @@
   display: block !important;
 }  */
 
-.hide {
+.is-collapsible .hide {
   display: none !important;
 }
 
@@ -60,6 +60,13 @@
   font-size: 0.5em;
   margin-left: 8px;
   transition: transform 0.2s;
-  display: inline-block;
+  display: none;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.is-collapsible .toggle-caret {
+  display: inline-block !important;
+  cursor: pointer;
 }
 

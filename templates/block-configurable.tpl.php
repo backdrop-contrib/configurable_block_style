@@ -20,32 +20,22 @@
     <?php print render($title_prefix);?>
     
     <?php if ($title):?>
-      <?php if ($collapsible): ?>
-        <h2 id="block-title-<?php print $block_id; ?>" class="block-title">
+      <h2 id="block-title-<?php print $block_id; ?>" class="block-title">
+        <?php if ($make_title_link): ?>
+          <span class="block-title-toggle">
+            <a href="<?php print $block_title_link; ?>"><?php print $title; ?></a>
+            <span class="toggle-caret" role="button" tabindex="0" aria-controls="block-content-<?php print $block_id; ?>" aria-expanded="true">&#9654;</span>
+          </span>
+        <?php else: ?>
           <span class="block-title-toggle" role="button" tabindex="0" aria-controls="block-content-<?php print $block_id; ?>" aria-expanded="true">
-            <?php if ($make_title_link): ?>
-              <a href="<?php print $block_title_link; ?>"><?php print $title; ?></a>
-            <?php else: ?>
-              <?php print $title; ?>
-            <?php endif; ?>
+            <?php print $title; ?>
             <span class="toggle-caret">&#9654;</span>
           </span>
-        </h2>
-        <div id="block-content-<?php print $block_id; ?>" class="block-content">
-          <?php print render($content);?>
-        </div>
-      <?php else: ?>
-        <?php if ($make_title_link): ?>
-          <h2 id="block-title-<?php print $block_id; ?>" class="block-title">
-            <a href="<?php print $block_title_link; ?>"><?php print $title; ?></a>
-          </h2>
-        <?php else: ?>
-          <h2 id="block-title-<?php print $block_id; ?>" class="block-title"><?php print $title;?></h2>
         <?php endif; ?>
-        <div id="block-content-<?php print $block_id; ?>" class="block-content">
-          <?php print render($content);?>
-        </div>
-      <?php endif; ?>
+      </h2>
+      <div id="block-content-<?php print $block_id; ?>" class="block-content">
+        <?php print render($content);?>
+      </div>
     <?php endif;?>
     
     <?php print render($title_suffix);?>
