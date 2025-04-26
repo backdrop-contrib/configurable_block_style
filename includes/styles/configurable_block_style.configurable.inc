@@ -51,8 +51,9 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'shadow_size' => '4',
       'shadow_color' => '#000000',
       'block_title_link' => '',
+      'make_title_link' => FALSE,
       'collapsible' => FALSE,
-      'show_caret' => FALSE,
+      'show_caret' => TRUE,
     );
     $this->is_region = $is_region;
   }
@@ -92,23 +93,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#type' => 'checkbox',
         '#default_value' => $this->settings['collapsible'],
         '#description' => t('Enable this option to make the block content collapsible.'),
-      );
-
-      $form['behaviors']['show_caret'] = array(
-        '#title' => t('Show caret indicator'),
-        '#type' => 'checkbox',
-        '#default_value' => $this->settings['show_caret'],
-        '#description' => t('Display a caret indicator next to the title.'),
-        '#attributes' => array(
-          'class' => array('indented-element'),
-          'type' => 'number',
-          'step' => '1',
-        ),
-        '#states' => array(
-          'visible' => array(
-            ':input[name="style_settings[behaviors][collapsible]"]' => array('checked' => TRUE),
-          ),
-        ),
       );
 
       // Block Title Link settings.
@@ -405,7 +389,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['shadow']['shadow_color'] = array(
         '#title' => t('Shadow Color'),
         '#type' => 'color',
-        '#default_value' => $this->settings['border_color'],
+        '#default_value' => $this->settings['shadow_color'],
         '#states' => array(
           'visible' => array(
             ':input[name="style_settings[shadow][shadow_type]"]' => array('value' => 'custom'),
@@ -541,7 +525,7 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['make_title_link'] = $form_state['values']['style_settings']['behaviors']['make_title_link'];
     $this->settings['block_title_link'] = $form_state['values']['style_settings']['behaviors']['block_title_link'];
     $this->settings['collapsible'] = $form_state['values']['style_settings']['behaviors']['collapsible'];
-    $this->settings['show_caret'] = $form_state['values']['style_settings']['behaviors']['show_caret'];
+    $this->settings['show_caret'] = TRUE;
   }
 
   protected function getUnitOptions() {

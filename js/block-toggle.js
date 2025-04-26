@@ -1,28 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Script loaded for block');
-  var blockTitles = document.querySelectorAll('.block-title');
-  console.log('Number of block titles found:', blockTitles.length);
-  blockTitles.forEach(function(blockTitle) {
-    var blockId = blockTitle.getAttribute('id').replace('block-title-', '');
-    var blockContent = document.querySelector('#block-content-' + blockId);
-    var toggleIcon = document.querySelector('#toggle-icon-' + blockId);
-    console.log('Block title:', blockTitle);
-    console.log('Block content:', blockContent);
-    console.log('Toggle icon:', toggleIcon);
-    if (blockTitle && blockContent && toggleIcon) {
-      // Set initial state
-      blockContent.style.display = 'block';
-      toggleIcon.innerHTML = '&#9660;'; // Down arrow
-
-      blockTitle.addEventListener('click', function() {
-        if (blockContent.style.display === 'none') {
-          blockContent.style.display = 'block';
-          toggleIcon.innerHTML = '&#9660;'; // Down arrow
-        } else {
-          blockContent.style.display = 'none';
-          toggleIcon.innerHTML = '&#9654;'; // Right arrow
-        }
-      });
+  var toggles = document.querySelectorAll('.block-title-toggle');
+  toggles.forEach(function(toggle) {
+    var contentId = toggle.getAttribute('aria-controls');
+    var content = document.getElementById(contentId);
+    var caret = toggle.querySelector('.toggle-caret');
+    if (!content || !caret) return;
+    function toggleBlock() {
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        content.classList.add('hide');
+        toggle.setAttribute('aria-expanded', 'false');
+        caret.style.transform = '';
+      } else {
+        content.classList.remove('hide');
+        toggle.setAttribute('aria-expanded', 'true');
+        caret.style.transform = 'rotate(90deg)';
+      }
+    }
+    toggle.addEventListener('click', toggleBlock);
+    toggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleBlock();
+      }
+    });
+    // Set initial state
+    if (content.classList.contains('hide')) {
+      toggle.setAttribute('aria-expanded', 'false');
+      caret.style.transform = '';
+    } else {
+      toggle.setAttribute('aria-expanded', 'true');
+      caret.style.transform = 'rotate(90deg)';
     }
   });
 }); 
