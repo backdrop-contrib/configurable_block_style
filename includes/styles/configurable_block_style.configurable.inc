@@ -53,7 +53,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'block_title_link' => '',
       'make_title_link' => FALSE,
       'collapsible' => FALSE,
-      'show_caret' => TRUE,
     );
     $this->is_region = $is_region;
   }
@@ -525,7 +524,6 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['make_title_link'] = $form_state['values']['style_settings']['behaviors']['make_title_link'];
     $this->settings['block_title_link'] = $form_state['values']['style_settings']['behaviors']['block_title_link'];
     $this->settings['collapsible'] = $form_state['values']['style_settings']['behaviors']['collapsible'];
-    $this->settings['show_caret'] = TRUE;
   }
 
   protected function getUnitOptions() {

@@ -100,6 +100,4 @@ function template_preprocess_block_configurable(&$variables) {
   }
 
   $variables['block_id'] = $block->module . '-' . $block->delta;
-
-  $variables['show_caret'] = !empty($style->settings['show_caret']);
 }
