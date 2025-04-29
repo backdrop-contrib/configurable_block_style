@@ -45,10 +45,14 @@
 }
 
 .block-title-toggle {
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   outline: none;
+}
+
+/* Only show pointer cursor when block is collapsible */
+.is-collapsible .block-title-toggle {
+  cursor: pointer;
 }
 
 .block-title-toggle:focus-visible {
@@ -57,7 +61,7 @@
 }
 
 .toggle-caret {
-  font-size: 0.5em;
+  font-size: 0.35em;
   margin-left: 8px;
   transition: transform 0.2s;
   display: none;

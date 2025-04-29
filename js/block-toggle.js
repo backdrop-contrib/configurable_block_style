@@ -1,18 +1,28 @@
 (function ($, Backdrop) {
   Backdrop.behaviors.configurableBlockStyle = {
     attach: function (context, settings) {
+      // Create a counter for blocks on this page
+      var blockCounter = 0;
+      
       $('.is-collapsible', context).each(function() {
-        var block = this;
-        var $toggle = $('.block-title-toggle', block);
-        var $caret = $('.toggle-caret', block);
+        blockCounter++;
+        var $block = $(this);
+        var $toggle = $('.block-title-toggle', $block);
+        var $caret = $('.toggle-caret', $block);
         var contentId = ($caret.length && $caret.attr('aria-controls')) || ($toggle.length && $toggle.attr('aria-controls'));
-        var $content = $('#' + contentId);
+        var $content = $block.find('#' + contentId);
         if (!$toggle.length || !$caret.length || !$content.length) return;
 
-        var blockId = block.id || contentId;
-        var storageKey = 'block-collapsed-' + blockId;
+        // Create a unique ID using the block's base ID and its position
+        var baseId = contentId.replace('block-content-', '');
+        var uniqueId = baseId + '-pos-' + blockCounter;
+        var pagePath = window.location.pathname;
+        var storageKey = 'block-collapsed-' + pagePath + '-' + uniqueId;
 
-        // Restore state from localStorage
+        // Store the unique ID on the block element
+        $block.attr('data-block-unique-id', uniqueId);
+
+        // Restore state from localStorage for this specific block
         var collapsed = localStorage.getItem(storageKey) === 'true';
         if (collapsed) {
           $content.addClass('hide');
@@ -26,7 +36,10 @@
           $caret.css('transform', 'rotate(90deg)');
         }
 
-        function toggleBlock() {
+        function toggleBlock(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
           var expanded = $caret.attr('aria-expanded') === 'true';
           if (expanded) {
             $content.addClass('hide');
@@ -43,13 +56,16 @@
           }
         }
 
+        // Remove any existing event handlers
+        $toggle.off('click keydown');
+        $caret.off('click keydown');
+
         // If the title is a link, only the caret toggles
         if ($toggle.has($caret).length && $toggle.find('a').length) {
           $caret.on('click', toggleBlock);
           $caret.on('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              toggleBlock();
+              toggleBlock(e);
             }
           });
         } else {
@@ -57,12 +73,11 @@
           $toggle.on('click', toggleBlock);
           $toggle.on('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              toggleBlock();
+              toggleBlock(e);
             }
           });
         }
       });
     }
   };
-})(jQuery, Backdrop); 
+})(jQuery, Backdrop);
