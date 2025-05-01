@@ -1,43 +1,7 @@
 /* Configurable Block Style - Front-end styles */
 
-/* .block-collapsible > summary.block-title {
-  font-size: 1.3em;
-  font-weight: 600;
-  margin: 0;
-  padding: 0;
-} */
-
-/* .configurable-block-style details summary {
-  display: block !important;
-}  */
-
 .is-collapsible .hide {
   display: none !important;
-}
-
-.toggle-block-content {
-  background: none;
-  border: none;
-  font-size: 0.5em;
-  cursor: pointer;
-  margin-left: 8px;
-  vertical-align: middle;
-  transition: transform 0.2s;
-  display: inline-block;
-}
-
-.toggle-block-content[aria-expanded="true"] {
-  transform: rotate(90deg);
-}
-
-.block-collapsible > summary.block-title,
-.configurable-block-style details summary {
-  /* Remove old details/summary styles */
-  font-size: inherit;
-  font-weight: inherit;
-  margin: 0;
-  padding: 0;
-  display: inherit;
 }
 
 .indented-element {
@@ -48,16 +12,6 @@
   display: inline-flex;
   align-items: center;
   outline: none;
-}
-
-/* Only show pointer cursor when block is collapsible */
-.is-collapsible .block-title-toggle {
-  cursor: pointer;
-}
-
-.block-title-toggle:focus-visible {
-  outline: 2px solid #2274a5;
-  outline-offset: 2px;
 }
 
 .toggle-caret {
@@ -73,4 +27,3 @@
   display: inline-block !important;
   cursor: pointer;
 }
-
