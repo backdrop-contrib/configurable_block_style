@@ -99,5 +99,5 @@ function template_preprocess_block_configurable(&$variables) {
     $variables['classes'][] = 'is-collapsible';
   }
 
-  $variables['block_id'] = $block->module . '-' . $block->delta;
+  $variables['block_id'] = $block->uuid;
 }

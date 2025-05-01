@@ -1,11 +1,7 @@
 (function ($, Backdrop) {
   Backdrop.behaviors.configurableBlockStyle = {
     attach: function (context, settings) {
-      // Create a counter for blocks on this page
-      var blockCounter = 0;
-      
       $('.is-collapsible', context).each(function() {
-        blockCounter++;
         var $block = $(this);
         var $toggle = $('.block-title-toggle', $block);
         var $caret = $('.toggle-caret', $block);
@@ -13,14 +9,10 @@
         var $content = $block.find('#' + contentId);
         if (!$toggle.length || !$caret.length || !$content.length) return;
 
-        // Create a unique ID using the block's base ID and its position
-        var baseId = contentId.replace('block-content-', '');
-        var uniqueId = baseId + '-pos-' + blockCounter;
+        // Get the block's UUID from the content ID
+        var blockId = contentId.replace('block-content-', '');
         var pagePath = window.location.pathname;
-        var storageKey = 'block-collapsed-' + pagePath + '-' + uniqueId;
-
-        // Store the unique ID on the block element
-        $block.attr('data-block-unique-id', uniqueId);
+        var storageKey = 'block-collapsed-' + pagePath + '-' + blockId;
 
         // Restore state from localStorage for this specific block
         var collapsed = localStorage.getItem(storageKey) === 'true';
