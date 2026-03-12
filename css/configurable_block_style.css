@@ -1,0 +1,29 @@
+/* Configurable Block Style - Front-end styles */
+
+.is-collapsible .hide {
+  display: none !important;
+}
+
+.indented-element {
+  margin-left: 20px; /* Adjust the value as needed */
+}
+
+.block-title-toggle {
+  display: inline-flex;
+  align-items: center;
+  outline: none;
+}
+
+.toggle-caret {
+  font-size: 0.35em;
+  margin-left: 8px;
+  transition: transform 0.2s;
+  display: none;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.is-collapsible .toggle-caret {
+  display: inline-block !important;
+  cursor: pointer;
+}

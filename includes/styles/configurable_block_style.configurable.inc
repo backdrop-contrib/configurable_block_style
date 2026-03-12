@@ -50,6 +50,9 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'shadow_type' => 'default',
       'shadow_size' => '4',
       'shadow_color' => '#000000',
+      'block_title_link' => '',
+      'make_title_link' => FALSE,
+      'collapsible' => FALSE,
       'wrapper_tag' => 'div',
       'title_tag' => 'h2',
       'title_classes' => 'block-title',
@@ -72,16 +75,62 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#description' => t('Separate multiple classes with spaces.'),
       );
 
-      // Content Container settings.
-      $form['content_container'] = array(
+      // Behaviors fieldset: container, collapsible, title link.
+      $behaviors_changed = (
+        $this->settings['content_container'] ||
+        $this->settings['collapsible'] ||
+        $this->settings['make_title_link']
+      );
+      $form['behaviors'] = array(
+        '#title' => t('Behaviors (container, collapsible, title link)'),
+        '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($behaviors_changed, array(
+          'content_container' => FALSE,
+          'collapsible' => FALSE,
+          'make_title_link' => FALSE,
+          'block_title_link' => '',
+        )),
+      );
+      $form['behaviors']['content_container'] = array(
         '#title' => t('Content container'),
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_container'],
         '#description' => t('Add div with container class to align text with other regions.'),
       );
+      $form['behaviors']['collapsible'] = array(
+        '#title' => t('Make block collapsible'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['collapsible'],
+        '#description' => t('Enable this option to make the block content collapsible.'),
+      );
+      $form['behaviors']['make_title_link'] = array(
+        '#title' => t('Make block title into a link'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->settings['make_title_link'],
+      );
+      $form['behaviors']['block_title_link'] = array(
+        '#title' => t('Block title link URL'),
+        '#type' => 'textfield',
+        '#default_value' => $this->settings['block_title_link'],
+        '#description' => t('Enter a URL to make the block title a link.'),
+        '#attributes' => array(
+          'class' => array('indented-element'),
+        ),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="style_settings[behaviors][make_title_link]"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
+      $form['behaviors']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
 
       // HTML markup settings.
-      $markup_is_default = (
+      $markup_changed = !(
         $this->settings['wrapper_tag'] === 'div' &&
         $this->settings['title_tag'] === 'h2' &&
         $this->settings['title_classes'] === 'block-title' &&
@@ -92,7 +141,14 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#title' => t('HTML Markup'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => $markup_is_default,
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($markup_changed, array(
+          'wrapper_tag' => 'div',
+          'title_tag' => 'h2',
+          'title_classes' => 'block-title',
+          'content_tag' => 'div',
+          'content_classes' => 'block-content',
+        )),
       );
       $form['markup']['wrapper_tag'] = array(
         '#title' => t('Wrapper tag'),
@@ -154,13 +210,24 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+      $form['markup']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
 
       // Color settings.
       $form['colors'] = array(
-        '#title' => t('Colors'),
+        '#title' => t('Colors (background, text)'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => $this->settings['color_type'] === 'default',
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($this->settings['color_type'] !== 'default', array(
+          'color_type' => 'default',
+          'background_color' => '#ffffff',
+          'text_color' => '#000000',
+          'tint' => FALSE,
+          'tint_value' => '0',
+        )),
       );
       $form['colors']['color_type'] = array(
         '#type' => 'select',
@@ -221,13 +288,25 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+      $form['colors']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
 
       // Height settings.
       $form['height'] = array(
-        '#title' => t('Height'),
+        '#title' => t('Height (fixed, responsive, background image)'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => $this->settings['height_type'] === 'default',
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($this->settings['height_type'] !== 'default', array(
+          'height_type' => 'default',
+          'height_amount' => '500',
+          'mn_height_amount' => '250',
+          'rel_height_amount' => '40',
+          'mx_height_amount' => '500',
+          'height_unit' => 'px',
+        )),
       );
       $form['height']['height_type'] = array(
         '#type' => 'select',
@@ -310,13 +389,23 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+      $form['height']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
 
       // Border settings.
       $form['border'] = array(
-        '#title' => t('Border'),
+        '#title' => t('Border (size, style, color)'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => $this->settings['border_type'] === 'default',
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($this->settings['border_type'] !== 'default', array(
+          'border_type' => 'default',
+          'border_size' => '2',
+          'border_style' => 'solid',
+          'border_color' => '#000000',
+        )),
       );
       $form['border']['border_type'] = array(
         '#type' => 'select',
@@ -361,13 +450,21 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+      $form['border']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
 
       // Corner settings.
       $form['corner'] = array(
         '#title' => t('Corners'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => $this->settings['corner_type'] === 'default',
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($this->settings['corner_type'] !== 'default', array(
+          'corner_type' => 'default',
+          'corner_size' => '8',
+        )),
       );
       $form['corner']['corner_type'] = array(
         '#type' => 'select',
@@ -392,13 +489,22 @@ class ConfigurableBlockStyle extends LayoutHandler {
           ),
         ),
       );
+      $form['corner']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
 
       // Shadow settings.
       $form['shadow'] = array(
-        '#title' => t('Shadow'),
+        '#title' => t('Shadow (size, color)'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => $this->settings['shadow_type'] === 'default',
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($this->settings['shadow_type'] !== 'default', array(
+          'shadow_type' => 'default',
+          'shadow_size' => '4',
+          'shadow_color' => '#000000',
+        )),
       );
       $form['shadow']['shadow_type'] = array(
         '#type' => 'select',
@@ -425,12 +531,16 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['shadow']['shadow_color'] = array(
         '#title' => t('Shadow Color'),
         '#type' => 'color',
-        '#default_value' => $this->settings['border_color'],
+        '#default_value' => $this->settings['shadow_color'],
         '#states' => array(
           'visible' => array(
             ':input[name="style_settings[shadow][shadow_type]"]' => array('value' => 'custom'),
           ),
         ),
+      );
+      $form['shadow']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
       );
 
       // Content padding settings.
@@ -438,7 +548,14 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#title' => t('Padding'),
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
-        '#collapsed' => !$this->settings['content_padding'],
+        '#collapsed' => TRUE,
+        '#attributes' => $this->changedAttributes($this->settings['content_padding'], array(
+          'content_padding' => FALSE,
+          'padding_top' => '40',
+          'padding_right' => '30',
+          'padding_bottom' => '30',
+          'padding_left' => '30',
+        )),
       );
 
       $form['padding']['content_padding'] = array(
@@ -508,8 +625,15 @@ class ConfigurableBlockStyle extends LayoutHandler {
         ),
       );
 
-      // Attach form css to fix color inputs.
-      $form['#attached']['css'][] = backdrop_get_path('module', 'configurable_block_style') . '/css/configurable_block_style.form.css';
+      $form['padding']['reset'] = array(
+        '#markup' => '<button type="button" class="fieldset-reset">' . t('Reset to defaults') . '</button>',
+        '#weight' => 100,
+      );
+
+      // Attach form css and admin JS.
+      $module_path = backdrop_get_path('module', 'configurable_block_style');
+      $form['#attached']['css'][] = $module_path . '/css/configurable_block_style.form.css';
+      $form['#attached']['js'][] = $module_path . '/js/configurable_block_style.admin.js';
     }
   }
 
@@ -531,7 +655,10 @@ class ConfigurableBlockStyle extends LayoutHandler {
     $this->settings['content_tag'] = $form_state['values']['style_settings']['markup']['content_tag'];
     $this->settings['content_classes'] = $form_state['values']['style_settings']['markup']['content_classes'];
 
-    $this->settings['content_container'] = $form_state['values']['style_settings']['content_container'];
+    $this->settings['content_container'] = $form_state['values']['style_settings']['behaviors']['content_container'];
+    $this->settings['collapsible'] = $form_state['values']['style_settings']['behaviors']['collapsible'];
+    $this->settings['make_title_link'] = $form_state['values']['style_settings']['behaviors']['make_title_link'];
+    $this->settings['block_title_link'] = $form_state['values']['style_settings']['behaviors']['block_title_link'];
     $this->settings['content_padding'] = $form_state['values']['style_settings']['padding']['content_padding'];
     $this->settings['padding_top'] = $form_state['values']['style_settings']['padding']['padding_top'];
     $this->settings['padding_right'] = $form_state['values']['style_settings']['padding']['padding_right'];
@@ -563,6 +690,24 @@ class ConfigurableBlockStyle extends LayoutHandler {
 
     $this->settings['tint'] = $form_state['values']['style_settings']['colors']['tint'];
     $this->settings['tint_value'] = $form_state['values']['style_settings']['colors']['tint_value'];
+  }
+
+  /**
+   * Returns #attributes array for a settings fieldset.
+   *
+   * Adds the 'settings-changed' class when $changed is TRUE, and always
+   * embeds $defaults as a JSON data attribute so the JS reset handler can
+   * restore fields without knowing the defaults itself.
+   */
+  protected function changedAttributes($changed, array $defaults = array()) {
+    $attrs = array();
+    if ($changed) {
+      $attrs['class'] = array('settings-changed');
+    }
+    if (!empty($defaults)) {
+      $attrs['data-cbs-defaults'] = json_encode($defaults);
+    }
+    return $attrs;
   }
 
   protected function getUnitOptions() {

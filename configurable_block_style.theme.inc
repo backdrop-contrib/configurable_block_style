@@ -5,6 +5,16 @@ function template_preprocess_block_configurable(&$variables) {
   include_once BACKDROP_ROOT . '/core/modules/layout/layout.theme.inc';
   template_preprocess_block($variables);
 
+  $variables['classes'][] = 'configurable-block-style';
+
+  // Add context classes for admin and dashboard pages.
+  if (function_exists('path_is_admin') && path_is_admin(current_path())) {
+    $variables['classes'][] = 'admin-panel';
+  }
+  if (function_exists('current_path') && current_path() === 'admin/dashboard') {
+    $variables['classes'][] = 'block-dashboard';
+  }
+
   $block = $variables['block'];
   $style = $block->style;
   if (empty($variables['attributes']['style'])) {
@@ -101,5 +111,14 @@ function template_preprocess_block_configurable(&$variables) {
       $style->settings['padding_right'] . 'px ' .
       $style->settings['padding_bottom'] . 'px ' .
       $style->settings['padding_left'] . 'px;';
+  }
+
+  // Behavior settings: title link, collapsible, block ID.
+  $variables['make_title_link'] = !empty($style->settings['make_title_link']);
+  $variables['block_title_link'] = !empty($style->settings['block_title_link']) ? $style->settings['block_title_link'] : '';
+  $variables['block_id'] = $block->uuid;
+
+  if (!empty($style->settings['collapsible'])) {
+    $variables['classes'][] = 'is-collapsible';
   }
 }
