@@ -22,3 +22,43 @@ input.form-color[type=color]::-webkit-color-swatch {
 input.form-color[type=color]::-webkit-color-swatch-wrapper {
   padding: 0;
 }
+
+/* Reset-to-defaults button inside each fieldset. */
+.fieldset-reset {
+  display: none;
+  margin-top: 12px;
+  padding: 4px 12px;
+  background-color: #fff8e6;
+  border: 1px solid #e0a800;
+  border-radius: 3px;
+  color: #7a5700;
+  cursor: pointer;
+  font-size: 0.85em;
+  line-height: 1.5;
+}
+
+.fieldset-reset:hover {
+  background-color: #ffefc0;
+  border-color: #c68a00;
+  color: #5a3f00;
+}
+
+.settings-changed .fieldset-reset {
+  display: inline-block;
+}
+
+/* Dot indicator on fieldsets with non-default settings. */
+fieldset.settings-changed {
+  position: relative;
+}
+
+fieldset.settings-changed > legend::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 0.4em;
+  width: 8px;
+  height: 8px;
+  background-color: #0074bd;
+  border-radius: 50%;
+}

@@ -5,6 +5,16 @@ function template_preprocess_block_configurable(&$variables) {
   include_once BACKDROP_ROOT . '/core/modules/layout/layout.theme.inc';
   template_preprocess_block($variables);
 
+  $variables['classes'][] = 'configurable-block-style';
+
+  // Add context classes for admin and dashboard pages.
+  if (function_exists('path_is_admin') && path_is_admin(current_path())) {
+    $variables['classes'][] = 'admin-panel';
+  }
+  if (function_exists('current_path') && current_path() === 'admin/dashboard') {
+    $variables['classes'][] = 'block-dashboard';
+  }
+
   $block = $variables['block'];
   $style = $block->style;
   if (empty($variables['attributes']['style'])) {
@@ -71,6 +81,29 @@ function template_preprocess_block_configurable(&$variables) {
     $variables['content_container'] = TRUE;
   }
 
+  // HTML markup settings.
+  $variables['wrapper_tag'] = $style->settings['wrapper_tag'];
+  $variables['title_tag'] = $style->settings['title_tag'];
+
+  $title_classes = explode(' ', $style->settings['title_classes']);
+  foreach ($title_classes as $n => $class) {
+    $title_classes[$n] = backdrop_clean_css_identifier($class, array());
+  }
+  $variables['title_attributes'] = array();
+  if (!empty(array_filter($title_classes))) {
+    $variables['title_attributes']['class'] = array_filter($title_classes);
+  }
+
+  $variables['content_tag'] = $style->settings['content_tag'];
+  $content_classes = explode(' ', $style->settings['content_classes']);
+  foreach ($content_classes as $n => $class) {
+    $content_classes[$n] = backdrop_clean_css_identifier($class, array());
+  }
+  $variables['content_attributes'] = array();
+  if (!empty(array_filter($content_classes))) {
+    $variables['content_attributes']['class'] = array_filter($content_classes);
+  }
+
   // Padding.
   if ($style->settings['content_padding'] == TRUE) {
     $variables['attributes']['style'] .= 'padding:' .
@@ -78,5 +111,15 @@ function template_preprocess_block_configurable(&$variables) {
       $style->settings['padding_right'] . 'px ' .
       $style->settings['padding_bottom'] . 'px ' .
       $style->settings['padding_left'] . 'px;';
+  }
+
+  // Behavior settings: title link, collapsible, block ID.
+  $variables['make_title_link'] = !empty($style->settings['make_title_link']);
+  $variables['block_title_link'] = !empty($style->settings['block_title_link']) ? $style->settings['block_title_link'] : '';
+  $variables['collapsible'] = !empty($style->settings['collapsible']);
+  $variables['block_id'] = $block->uuid;
+
+  if ($variables['collapsible']) {
+    $variables['classes'][] = 'is-collapsible';
   }
 }

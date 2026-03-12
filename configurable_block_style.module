@@ -1,5 +1,45 @@
 <?php
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Improves discoverability of the Configurable style:
+ * - Opens the Style settings fieldset so it is visible without an extra click.
+ * - Adds a description to the style selector pointing to the Configurable
+ *   option for site architects who may not know it exists.
+ * - For new blocks being added to a layout, pre-selects the Configurable
+ *   style and renders its settings form immediately so no AJAX step is needed.
+ */
+function configurable_block_style_form_layout_block_configure_form_alter(&$form, &$form_state) {
+  if (!isset($form['style'])) {
+    return;
+  }
+
+  // Open the Style settings fieldset by default.
+  $form['style']['#collapsed'] = FALSE;
+
+  // Add a hint to the style selector.
+  if (isset($form['style']['style'])) {
+    $form['style']['style']['#description'] = t('Select %configurable for visual styling options: colors, height, borders, corners, shadows, padding, and more.', array('%configurable' => t('Configurable')));
+  }
+
+  // For new blocks only, pre-select Configurable and show its settings form.
+  $block = isset($form_state['block']) ? $form_state['block'] : NULL;
+  if ($block && empty($block->uuid) && isset($form['style']['style'])) {
+    $form['style']['style']['#default_value'] = 'configurable';
+
+    // Rebuild the style_settings container with the Configurable form so the
+    // settings are visible immediately without requiring an AJAX round-trip.
+    $cbs_style = new ConfigurableBlockStyle('configurable', array());
+    $form['style']['style_settings'] = array(
+      '#type' => 'container',
+      '#id' => 'block_style_settings',
+      '#parents' => array('style_settings'),
+    );
+    $cbs_style->form($form['style']['style_settings'], $form_state);
+  }
+}
+
 function configurable_block_style_autoload_info() {
   return array(
     'ConfigurableBlockStyle' => 'includes/styles/configurable_block_style.configurable.inc',
