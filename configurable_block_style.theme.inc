@@ -71,6 +71,29 @@ function template_preprocess_block_configurable(&$variables) {
     $variables['content_container'] = TRUE;
   }
 
+  // HTML markup settings.
+  $variables['wrapper_tag'] = $style->settings['wrapper_tag'];
+  $variables['title_tag'] = $style->settings['title_tag'];
+
+  $title_classes = explode(' ', $style->settings['title_classes']);
+  foreach ($title_classes as $n => $class) {
+    $title_classes[$n] = backdrop_clean_css_identifier($class, array());
+  }
+  $variables['title_attributes'] = array();
+  if (!empty(array_filter($title_classes))) {
+    $variables['title_attributes']['class'] = array_filter($title_classes);
+  }
+
+  $variables['content_tag'] = $style->settings['content_tag'];
+  $content_classes = explode(' ', $style->settings['content_classes']);
+  foreach ($content_classes as $n => $class) {
+    $content_classes[$n] = backdrop_clean_css_identifier($class, array());
+  }
+  $variables['content_attributes'] = array();
+  if (!empty(array_filter($content_classes))) {
+    $variables['content_attributes']['class'] = array_filter($content_classes);
+  }
+
   // Padding.
   if ($style->settings['content_padding'] == TRUE) {
     $variables['attributes']['style'] .= 'padding:' .

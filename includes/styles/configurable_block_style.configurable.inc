@@ -50,6 +50,11 @@ class ConfigurableBlockStyle extends LayoutHandler {
       'shadow_type' => 'default',
       'shadow_size' => '4',
       'shadow_color' => '#000000',
+      'wrapper_tag' => 'div',
+      'title_tag' => 'h2',
+      'title_classes' => 'block-title',
+      'content_tag' => 'div',
+      'content_classes' => 'block-content',
     );
     $this->is_region = $is_region;
   }
@@ -73,6 +78,72 @@ class ConfigurableBlockStyle extends LayoutHandler {
         '#type' => 'checkbox',
         '#default_value' => $this->settings['content_container'],
         '#description' => t('Add div with container class to align text with other regions.'),
+      );
+
+      // HTML markup settings.
+      $form['markup'] = array(
+        '#title' => t('HTML Markup'),
+        '#type' => 'fieldset',
+      );
+      $form['markup']['wrapper_tag'] = array(
+        '#title' => t('Wrapper tag'),
+        '#type' => 'select',
+        '#options' => array(
+          'div' => 'DIV',
+          'aside' => 'ASIDE',
+          'section' => 'SECTION',
+          'nav' => 'NAV',
+          'p' => 'P',
+        ),
+        '#default_value' => $this->settings['wrapper_tag'],
+        '#description' => t('HTML tag to use for the block wrapper element.'),
+      );
+      $form['markup']['title_tag'] = array(
+        '#title' => t('Heading level'),
+        '#type' => 'select',
+        '#options' => array(
+          'h1' => 'H1',
+          'h2' => 'H2',
+          'h3' => 'H3',
+          'h4' => 'H4',
+          'h5' => 'H5',
+          'h6' => 'H6',
+          'div' => 'DIV',
+          'p' => 'P',
+        ),
+        '#default_value' => $this->settings['title_tag'],
+        '#description' => t('HTML tag to use for the block title.'),
+      );
+      $form['markup']['title_classes'] = array(
+        '#title' => t('Heading classes'),
+        '#type' => 'textfield',
+        '#default_value' => $this->settings['title_classes'],
+        '#description' => t('CSS classes to add to the block title. Separate multiple classes with spaces.'),
+      );
+      $form['markup']['content_tag'] = array(
+        '#title' => t('Content tag'),
+        '#type' => 'select',
+        '#options' => array(
+          'div' => 'DIV',
+          'aside' => 'ASIDE',
+          'section' => 'SECTION',
+          'nav' => 'NAV',
+          'p' => 'P',
+          '' => t('No content tag'),
+        ),
+        '#default_value' => $this->settings['content_tag'],
+        '#description' => t('HTML tag to wrap the block content.'),
+      );
+      $form['markup']['content_classes'] = array(
+        '#title' => t('Content classes'),
+        '#type' => 'textfield',
+        '#default_value' => $this->settings['content_classes'],
+        '#description' => t('CSS classes to add to the content wrapper. Separate multiple classes with spaces.'),
+        '#states' => array(
+          'invisible' => array(
+            ':input[name="style_settings[markup][content_tag]"]' => array('value' => ''),
+          ),
+        ),
       );
 
       // Color settings.
@@ -432,6 +503,12 @@ class ConfigurableBlockStyle extends LayoutHandler {
    */
   public function formSubmit($form, $form_state) {
     $this->settings['classes'] = $form_state['values']['style_settings']['classes'];
+
+    $this->settings['wrapper_tag'] = $form_state['values']['style_settings']['markup']['wrapper_tag'];
+    $this->settings['title_tag'] = $form_state['values']['style_settings']['markup']['title_tag'];
+    $this->settings['title_classes'] = $form_state['values']['style_settings']['markup']['title_classes'];
+    $this->settings['content_tag'] = $form_state['values']['style_settings']['markup']['content_tag'];
+    $this->settings['content_classes'] = $form_state['values']['style_settings']['markup']['content_classes'];
 
     $this->settings['content_container'] = $form_state['values']['style_settings']['content_container'];
     $this->settings['content_padding'] = $form_state['values']['style_settings']['padding']['content_padding'];
