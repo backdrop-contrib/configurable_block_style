@@ -116,9 +116,10 @@ function template_preprocess_block_configurable(&$variables) {
   // Behavior settings: title link, collapsible, block ID.
   $variables['make_title_link'] = !empty($style->settings['make_title_link']);
   $variables['block_title_link'] = !empty($style->settings['block_title_link']) ? $style->settings['block_title_link'] : '';
+  $variables['collapsible'] = !empty($style->settings['collapsible']);
   $variables['block_id'] = $block->uuid;
 
-  if (!empty($style->settings['collapsible'])) {
+  if ($variables['collapsible']) {
     $variables['classes'][] = 'is-collapsible';
   }
 }
