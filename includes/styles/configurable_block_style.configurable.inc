@@ -81,9 +81,18 @@ class ConfigurableBlockStyle extends LayoutHandler {
       );
 
       // HTML markup settings.
+      $markup_is_default = (
+        $this->settings['wrapper_tag'] === 'div' &&
+        $this->settings['title_tag'] === 'h2' &&
+        $this->settings['title_classes'] === 'block-title' &&
+        $this->settings['content_tag'] === 'div' &&
+        $this->settings['content_classes'] === 'block-content'
+      );
       $form['markup'] = array(
         '#title' => t('HTML Markup'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => $markup_is_default,
       );
       $form['markup']['wrapper_tag'] = array(
         '#title' => t('Wrapper tag'),
@@ -150,6 +159,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['colors'] = array(
         '#title' => t('Colors'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => $this->settings['color_type'] === 'default',
       );
       $form['colors']['color_type'] = array(
         '#type' => 'select',
@@ -215,6 +226,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['height'] = array(
         '#title' => t('Height'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => $this->settings['height_type'] === 'default',
       );
       $form['height']['height_type'] = array(
         '#type' => 'select',
@@ -302,6 +315,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['border'] = array(
         '#title' => t('Border'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => $this->settings['border_type'] === 'default',
       );
       $form['border']['border_type'] = array(
         '#type' => 'select',
@@ -351,6 +366,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['corner'] = array(
         '#title' => t('Corners'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => $this->settings['corner_type'] === 'default',
       );
       $form['corner']['corner_type'] = array(
         '#type' => 'select',
@@ -380,6 +397,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['shadow'] = array(
         '#title' => t('Shadow'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => $this->settings['shadow_type'] === 'default',
       );
       $form['shadow']['shadow_type'] = array(
         '#type' => 'select',
@@ -418,6 +437,8 @@ class ConfigurableBlockStyle extends LayoutHandler {
       $form['padding'] = array(
         '#title' => t('Padding'),
         '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => !$this->settings['content_padding'],
       );
 
       $form['padding']['content_padding'] = array(
