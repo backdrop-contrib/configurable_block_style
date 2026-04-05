@@ -15,18 +15,6 @@ customization of the appearance and markup of your blocks — without writing an
 - **Shadow** — Add a drop shadow with configurable size and color
 - **Padding** — Set custom top, right, bottom, and left padding values
 
-### Layout & Markup
-- **Content container** — Wrap block content in a `.container` div to align it with
-  other layout regions
-- **Wrapper tag** — Choose the HTML element for the block wrapper (DIV, ASIDE, SECTION,
-  NAV, P)
-- **Heading level** — Choose the HTML tag for the block title (H1–H6, DIV, P)
-- **Heading classes** — Add custom CSS classes to the block title element
-- **Content tag** — Choose the HTML element wrapping the block content, or remove it
-  entirely
-- **Content classes** — Add custom CSS classes to the content wrapper element
-- **Additional CSS classes** — Add custom classes to the block wrapper
-
 All settings sections collapse automatically when at their defaults, keeping the
 configuration form compact. Sections with active customizations stay open for easy review.
 
